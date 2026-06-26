@@ -1,8 +1,4 @@
 import type { Model } from "../engine/types"
-import { checkout } from "../fixtures/checkout"
-import gatewayJson from "../../../../examples/github-app-gateway.system.json"
-
-const gateway = gatewayJson as Model
 
 export interface VisionEntry {
   id: string
@@ -36,23 +32,7 @@ function emptyModel(name: string): Model {
 }
 
 function seed(): { visions: VisionEntry[]; activeId: string } {
-  const first: VisionEntry = {
-    id: "checkout",
-    name: "Checkout",
-    color: PAPER_COLORS[0],
-    order: 0,
-    model: checkout,
-    revision: 1,
-  }
-  const gatewayVision: VisionEntry = {
-    id: "github-app-gateway",
-    name: "GitHub App Gateway",
-    color: PAPER_COLORS[2],
-    order: 1,
-    model: gateway,
-    revision: 1,
-  }
-  return { visions: [first, gatewayVision], activeId: gatewayVision.id }
+  return { visions: [], activeId: "" }
 }
 
 export interface StoreState {
@@ -91,6 +71,14 @@ export function createVision(state: StoreState, name: string, color?: string): S
     model: emptyModel(name),
     revision: 1,
   }
+  return { visions: [...state.visions, vision], activeId: id }
+}
+
+export function addVisionFromModel(state: StoreState, model: Model, label: string): StoreState {
+  const id = `m-${state.visions.length}-${label.toLowerCase().replace(/\s+/g, "-")}`
+  const order = state.visions.length === 0 ? 0 : Math.max(...state.visions.map(v => v.order)) + 1
+  const color = PAPER_COLORS[state.visions.length % PAPER_COLORS.length]
+  const vision: VisionEntry = { id, name: label, color, order, model, revision: 1 }
   return { visions: [...state.visions, vision], activeId: id }
 }
 
