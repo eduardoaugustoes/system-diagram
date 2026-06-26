@@ -32,6 +32,12 @@ export function Graph({ model, layout, overlay, selectedId, onSelect }: GraphPro
     return map
   }, [layout])
 
+  const containerIds = useMemo(() => {
+    const set = new Set<string>()
+    for (const c of model.components) if (c.parentId) set.add(c.parentId)
+    return set
+  }, [model])
+
   const padding = 32
   const viewWidth = layout.width + padding * 2
   const viewHeight = layout.height + padding * 2
@@ -135,7 +141,7 @@ export function Graph({ model, layout, overlay, selectedId, onSelect }: GraphPro
         const component = nodeIndex.get(positioned.id)
         if (!component) return null
         if (component.parentId) {
-          // contained child: a small chip drawn at its absolute position
+          // contained child: a small chip with a type label + its own name
           const childIcon = iconForSubtype(component.metadata?.subtype as string | undefined)
           return (
             <g key={positioned.id} transform={`translate(${positioned.x}, ${positioned.y})`}>
@@ -144,19 +150,33 @@ export function Graph({ model, layout, overlay, selectedId, onSelect }: GraphPro
                 height={positioned.height}
                 rx={4}
                 ry={4}
-                fill={COLORS.bg}
+                fill={COLORS.cardBg}
                 stroke={COLORS.faded}
                 strokeWidth={1}
               />
+              {childIcon && (
+                <text
+                  x={positioned.width / 2}
+                  y={positioned.height / 2 - 5}
+                  textAnchor="middle"
+                  fontFamily="Inter, sans-serif"
+                  fontSize={7}
+                  fontWeight={600}
+                  letterSpacing={0.5}
+                  fill={COLORS.mutedInk}
+                >
+                  {childIcon.label.toUpperCase()}
+                </text>
+              )}
               <text
                 x={positioned.width / 2}
-                y={positioned.height / 2 + 3}
+                y={positioned.height / 2 + 7}
                 textAnchor="middle"
                 fontFamily="JetBrains Mono, monospace"
-                fontSize={9}
-                fill={COLORS.mutedInk}
+                fontSize={8}
+                fill={COLORS.ink}
               >
-                {childIcon ? childIcon.label.toUpperCase() : component.name}
+                {component.name}
               </text>
             </g>
           )
@@ -208,7 +228,13 @@ export function Graph({ model, layout, overlay, selectedId, onSelect }: GraphPro
             })()}
             <text
               x={positioned.width / 2}
-              y={component.kind === "queue" ? positioned.height / 2 + 4 : positioned.height / 2 - 2}
+              y={
+                containerIds.has(positioned.id)
+                  ? 26
+                  : component.kind === "queue"
+                    ? positioned.height / 2 + 4
+                    : positioned.height / 2 - 2
+              }
               textAnchor="middle"
               fontFamily="JetBrains Mono, monospace"
               fontSize={12}
