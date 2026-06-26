@@ -1,5 +1,8 @@
 import type { Model } from "../engine/types"
 import { checkout } from "../fixtures/checkout"
+import gatewayJson from "../../../../examples/github-app-gateway.system.json"
+
+const gateway = gatewayJson as Model
 
 export interface VisionEntry {
   id: string
@@ -41,7 +44,15 @@ function seed(): { visions: VisionEntry[]; activeId: string } {
     model: checkout,
     revision: 1,
   }
-  return { visions: [first], activeId: first.id }
+  const gatewayVision: VisionEntry = {
+    id: "github-app-gateway",
+    name: "GitHub App Gateway",
+    color: PAPER_COLORS[2],
+    order: 1,
+    model: gateway,
+    revision: 1,
+  }
+  return { visions: [first, gatewayVision], activeId: gatewayVision.id }
 }
 
 export interface StoreState {
