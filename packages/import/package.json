@@ -1,0 +1,20 @@
+{
+  "name": "@system-diagram/import",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "bin": { "cdk-import": "tsx src/cli.ts" },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "cdk-import": "tsx src/cli.ts"
+  },
+  "dependencies": {
+    "ts-morph": "^23.0.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.0"
+  }
+}
