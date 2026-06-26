@@ -22,6 +22,32 @@ export function validate(model: Model): { ok: boolean; errors: ValidationError[]
     }
     componentIds.add(component.id)
   }
+  const parentIds = new Set<string>()
+  for (const component of model.components) {
+    if (component.parentId !== undefined) parentIds.add(component.id)
+  }
+  for (const component of model.components) {
+    if (component.parentId === undefined) continue
+    if (!componentIds.has(component.parentId)) {
+      errors.push({
+        code: "REF",
+        path: `/components/${component.id}/parentId`,
+        message: `Unknown parentId: ${component.parentId}`,
+        nodeId: component.id,
+      })
+    }
+    if (parentIds.has(component.parentId)) {
+      const parent = model.components.find(c => c.id === component.parentId)
+      if (parent?.parentId !== undefined) {
+        errors.push({
+          code: "CYCLE",
+          path: `/components/${component.id}/parentId`,
+          message: `Multi-level nesting not allowed: ${component.parentId} is itself a child`,
+          nodeId: component.id,
+        })
+      }
+    }
+  }
   const connectionIds = new Set<string>()
   for (const connection of model.connections) {
     if (connectionIds.has(connection.id)) {
