@@ -73,7 +73,98 @@ export function extractConnections(source: SourceFile, ctx: ConnContext): ConnRe
       if (!granteeArg) continue
       // resource (parts.receiver) grants to grantee → edge from grantee to resource
       pushEdge(granteeArg.getText(), parts.receiver, grant, call.getStartLineNumber(), parts.method)
+      continue
     }
+
+    // ── HttpLambdaIntegration inside addRoutes({ path, integration }) ──
+    if (parts.method === "addRoutes") {
+      const optionsArg = call.getArguments()[0]?.asKind(SyntaxKind.ObjectLiteralExpression)
+      if (optionsArg) {
+        const pathText = optionsArg
+          .getProperty("path")
+          ?.getFirstDescendantByKind(SyntaxKind.StringLiteral)
+          ?.getLiteralText()
+        const integ = optionsArg
+          .getProperty("integration")
+          ?.getFirstDescendantByKind(SyntaxKind.NewExpression)
+        if (integ && integ.getExpression().getText().includes("HttpLambdaIntegration")) {
+          const args = integ.getArguments()
+          const lambdaArg = args[1] ?? args[0]
+          if (lambdaArg) {
+            pushEdge(
+              parts.receiver,
+              lambdaArg.getText(),
+              { kind: "sync-call", criticality: "hard", optional: false },
+              call.getStartLineNumber(),
+              pathText,
+            )
+          }
+        }
+      }
+      continue
+    }
+
+    // ── fn.addEventSource(new SqsEventSource(queue, ...)) ──
+    if (parts.method === "addEventSource") {
+      const srcExpr = call.getArguments()[0]?.asKind(SyntaxKind.NewExpression)
+      const queueArg = srcExpr?.getArguments()[0]
+      if (queueArg) {
+        pushEdge(
+          queueArg.getText(),
+          parts.receiver,
+          { kind: "async-event", criticality: "soft", optional: true },
+          call.getStartLineNumber(),
+          "event source",
+        )
+      }
+      continue
+    }
+
+    // ── topic.addSubscription(new LambdaSubscription(fn)) ──
+    if (parts.method === "addSubscription") {
+      const subExpr = call.getArguments()[0]?.asKind(SyntaxKind.NewExpression)
+      const fnArg = subExpr?.getArguments()[0]
+      if (fnArg) {
+        pushEdge(
+          parts.receiver,
+          fnArg.getText(),
+          { kind: "async-event", criticality: "soft", optional: true },
+          call.getStartLineNumber(),
+          "subscription",
+        )
+      }
+      continue
+    }
+  }
+
+  // ── deadLetterQueue: { queue: <dlq> } inside a Queue construction ──
+  for (const newExpr of source.getDescendantsOfKind(SyntaxKind.NewExpression)) {
+    if (!newExpr.getExpression().getText().includes("Queue")) continue
+    const opts = newExpr.getArguments()[2]?.asKind(SyntaxKind.ObjectLiteralExpression)
+    const dlqProp = opts
+      ?.getProperty("deadLetterQueue")
+      ?.getFirstDescendantByKind(SyntaxKind.ObjectLiteralExpression)
+    const queueRef = dlqProp
+      ?.getProperty("queue")
+      ?.asKind(SyntaxKind.PropertyAssignment)
+      ?.getInitializer()
+      ?.getText()
+    if (!queueRef) continue
+    const ownerVar =
+      newExpr.getFirstAncestorByKind(SyntaxKind.VariableDeclaration)?.getName() ??
+      (() => {
+        const bin = newExpr.getFirstAncestorByKind(SyntaxKind.BinaryExpression)
+        const left = bin?.getLeft().getText()
+        return left?.startsWith("this.") ? left.slice("this.".length) : left
+      })()
+    if (!ownerVar) continue
+    pushEdge(
+      ownerVar,
+      queueRef,
+      { kind: "async-event", criticality: "soft", optional: true },
+      newExpr.getStartLineNumber(),
+      "dead-letter",
+    )
   }
 
   return { connections, diagnostics }
