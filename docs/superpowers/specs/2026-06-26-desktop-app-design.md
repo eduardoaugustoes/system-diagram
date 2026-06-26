@@ -67,6 +67,7 @@ apps/desktop
     - empty state + "Open" entry point that calls window.systemDiagram.*
     - the build is loaded by the main process (loadFile on the Vite build, or
       loadURL on the dev server in development)
+    - Electron-only: no standalone web mode; models come only from the OS picker
 
 OpenResult =
   | { ok: true; model: Model; diagnostics: Diagnostic[]; source: string }
@@ -114,16 +115,25 @@ Recent
 
 ## Renderer changes (small, additive)
 
+The renderer is **Electron-only** — there is no plain-web-dev fallback. Models
+come exclusively from the OS picker via the shell.
+
 1. `visionStore.ts`: add `addVisionFromModel(state, model, label): StoreState` that
-   appends a vision and makes it active. The build-time gateway/checkout seed
-   stays as a fallback for `npm run dev` outside Electron.
-2. `App.tsx`: detect `window.systemDiagram` (present only under Electron); when
-   present, render an "Open a CDK folder to begin" affordance and wire the Open
-   actions to the preload API + `addVisionFromModel`. When absent (plain web dev),
-   behave exactly as today.
+   appends a vision and makes it active. **Remove the build-time gateway/checkout
+   seed** — `seed()` now returns an empty vision list (the app starts on the empty
+   state until the user opens something). The build-time import of
+   `examples/github-app-gateway.system.json` is deleted.
+2. `App.tsx`: always render the shell-driven UI — an "Open a CDK folder to begin"
+   empty state when no vision is loaded, and wire the Open actions to
+   `window.systemDiagram.*` + `addVisionFromModel`. `window.systemDiagram` is
+   always present (the app only runs under Electron).
 3. A small diagnostics surface (a "N notes" pill that lists the `Diagnostic[]`).
 
 No changes to engine, lens, layout, Graph, styleTable, icons.
+
+Note: the existing `checkout` fixture and the `examples/*.system.json` file remain
+in the repo as test/demo data and as things you can Open via the file dialog —
+they are just no longer auto-seeded into the renderer at build time.
 
 ## Error handling
 
