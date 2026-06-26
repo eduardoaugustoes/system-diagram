@@ -5,6 +5,7 @@ import { blastRadius, overlayFromBlastRadius, type Overlay } from "./lens/blastR
 import { Graph } from "./renderer/Graph"
 import { layoutModel, type LayoutResult } from "./renderer/layout"
 import {
+  addVisionFromModel,
   createVision,
   deleteVision,
   loadStore,
@@ -15,8 +16,10 @@ import {
   type StoreState,
   updateVisionModel,
 } from "./store/visionStore"
+import type { OpenResult } from "./systemDiagramApi"
 import { ComponentsPanel } from "./ui/ComponentsPanel"
 import { EditPanel } from "./ui/EditPanel"
+import { EmptyState } from "./ui/EmptyState"
 import { FloatingSelection } from "./ui/FloatingSelection"
 import { IconRail, type RailIcon } from "./ui/IconRail"
 import { VisionsPanel } from "./ui/VisionsPanel"
@@ -112,8 +115,44 @@ export function App() {
     return () => window.removeEventListener("keydown", onKeyDown)
   }, [selectedId, overlay, railIcon, runBlastRadius])
 
+  const handleOpenResult = useCallback((result: OpenResult, fallbackLabel: string) => {
+    if (!result.ok) {
+      setError(result.error)
+      return
+    }
+    setError(null)
+    const label = result.model.system.name || fallbackLabel
+    setStore(s => addVisionFromModel(s, result.model, label))
+    if (result.diagnostics.length > 0) {
+      setError(`${result.diagnostics.length} note(s) from import — see console`)
+      // eslint-disable-next-line no-console
+      console.table(result.diagnostics)
+    }
+  }, [])
+
+  const openFolder = useCallback(async () => {
+    const r = await window.systemDiagram.openFolder()
+    handleOpenResult(r, "Imported system")
+  }, [handleOpenResult])
+
+  const openFile = useCallback(async () => {
+    const r = await window.systemDiagram.openFile()
+    handleOpenResult(r, "Loaded system")
+  }, [handleOpenResult])
+
+  useEffect(() => {
+    window.systemDiagram.onMenu(action => {
+      if (action === "open-folder") void openFolder()
+      else void openFile()
+    })
+  }, [openFolder, openFile])
+
   const overlayCaption = overlay?.legend ?? null
   const isEmpty = model && model.components.length === 0
+
+  if (!activeVision) {
+    return <EmptyState onOpenFolder={openFolder} onOpenFile={openFile} />
+  }
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh", background: "#FAFAF9" }}>
