@@ -9,6 +9,7 @@ import {
   nodeStyle,
   overlayContext,
 } from "./styleTable"
+import { iconForSubtype } from "./icons"
 
 interface GraphProps {
   model: Model
@@ -161,6 +162,23 @@ export function Graph({ model, layout, overlay, selectedId, onSelect }: GraphPro
               strokeWidth={selected ? 2.5 : style.strokeWidth}
               cornerRadius={style.cornerRadius}
             />
+            {(() => {
+              const icon = iconForSubtype(component.metadata?.subtype as string | undefined)
+              return icon ? (
+                <text
+                  x={positioned.width / 2}
+                  y={14}
+                  textAnchor="middle"
+                  fontFamily="Inter, sans-serif"
+                  fontSize={9}
+                  fontWeight={600}
+                  letterSpacing={0.5}
+                  fill={ctx.faded ? COLORS.fadedText : COLORS.mutedInk}
+                >
+                  {icon.label.toUpperCase()}
+                </text>
+              ) : null
+            })()}
             <text
               x={positioned.width / 2}
               y={component.kind === "queue" ? positioned.height / 2 + 4 : positioned.height / 2 - 2}
