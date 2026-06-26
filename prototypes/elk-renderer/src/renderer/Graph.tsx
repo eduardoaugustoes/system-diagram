@@ -134,6 +134,33 @@ export function Graph({ model, layout, overlay, selectedId, onSelect }: GraphPro
       {layout.nodes.map(positioned => {
         const component = nodeIndex.get(positioned.id)
         if (!component) return null
+        if (component.parentId) {
+          // contained child: a small chip drawn at its absolute position
+          const childIcon = iconForSubtype(component.metadata?.subtype as string | undefined)
+          return (
+            <g key={positioned.id} transform={`translate(${positioned.x}, ${positioned.y})`}>
+              <rect
+                width={positioned.width}
+                height={positioned.height}
+                rx={4}
+                ry={4}
+                fill={COLORS.bg}
+                stroke={COLORS.faded}
+                strokeWidth={1}
+              />
+              <text
+                x={positioned.width / 2}
+                y={positioned.height / 2 + 3}
+                textAnchor="middle"
+                fontFamily="JetBrains Mono, monospace"
+                fontSize={9}
+                fill={COLORS.mutedInk}
+              >
+                {childIcon ? childIcon.label.toUpperCase() : component.name}
+              </text>
+            </g>
+          )
+        }
         const ctx = overlayContext(overlay, positioned.id)
         const style = nodeStyle(
           component.kind,
