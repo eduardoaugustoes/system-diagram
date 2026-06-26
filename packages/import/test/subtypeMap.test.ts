@@ -20,7 +20,12 @@ describe("lookupSubtype", () => {
     expect(lookupSubtype("Secret")?.kind).toBe("datastore")
     expect(lookupSubtype("HttpApi")?.kind).toBe("external")
   })
-  it("returns undefined for unknown classes", () => {
-    expect(lookupSubtype("LogGroup")).toBeUndefined()
+  it("maps LogGroup to an aws:logs job", () => {
+    expect(lookupSubtype("LogGroup")).toEqual({
+      kind: "job", subtype: "aws:logs", awsService: "CloudWatch Logs", icon: "logs",
+    })
+  })
+  it("returns undefined for genuinely unknown classes", () => {
+    expect(lookupSubtype("CfnOutput")).toBeUndefined()
   })
 })

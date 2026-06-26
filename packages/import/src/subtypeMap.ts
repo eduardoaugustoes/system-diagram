@@ -18,6 +18,7 @@ const MAP: Record<string, SubtypeEntry> = {
   Rule: { kind: "job", subtype: "aws:eventbridge", awsService: "EventBridge", icon: "eventbridge" },
   Alarm: { kind: "job", subtype: "aws:cloudwatch", awsService: "CloudWatch", icon: "cloudwatch" },
   Dashboard: { kind: "job", subtype: "aws:cloudwatch", awsService: "CloudWatch", icon: "cloudwatch" },
+  LogGroup: { kind: "job", subtype: "aws:logs", awsService: "CloudWatch Logs", icon: "logs" },
 }
 
 export function lookupSubtype(cdkClass: string): SubtypeEntry | undefined {
