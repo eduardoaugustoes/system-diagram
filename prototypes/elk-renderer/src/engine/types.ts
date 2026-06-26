@@ -34,6 +34,7 @@ export interface Component {
   description?: string
   globalId?: GlobalId
   ownerId?: string
+  parentId?: NodeId
   capabilityIds: string[]
   tags: Tag[]
   metadata: Record<string, JsonValue>

@@ -1,0 +1,748 @@
+{
+  "system": {
+    "id": "github-app-gateway",
+    "name": "GitHub App Gateway"
+  },
+  "components": [
+    {
+      "id": "handoffLogGroup",
+      "kind": "job",
+      "name": "handoffLogGroup",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:logs",
+        "awsService": "CloudWatch Logs",
+        "icon": "logs"
+      },
+      "parentId": "handoffLambda"
+    },
+    {
+      "id": "handoffLambda",
+      "kind": "service",
+      "name": "handoffLambda",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:lambda",
+        "awsService": "Lambda",
+        "icon": "lambda"
+      }
+    },
+    {
+      "id": "installationsLookupLogGroup",
+      "kind": "job",
+      "name": "installationsLookupLogGroup",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:logs",
+        "awsService": "CloudWatch Logs",
+        "icon": "logs"
+      },
+      "parentId": "installationsLookupLambda"
+    },
+    {
+      "id": "installationsLookupLambda",
+      "kind": "service",
+      "name": "installationsLookupLambda",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:lambda",
+        "awsService": "Lambda",
+        "icon": "lambda"
+      }
+    },
+    {
+      "id": "repoEnvironmentsLogGroup",
+      "kind": "job",
+      "name": "repoEnvironmentsLogGroup",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:logs",
+        "awsService": "CloudWatch Logs",
+        "icon": "logs"
+      },
+      "parentId": "repoEnvironmentsLambda"
+    },
+    {
+      "id": "repoEnvironmentsLambda",
+      "kind": "service",
+      "name": "repoEnvironmentsLambda",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:lambda",
+        "awsService": "Lambda",
+        "icon": "lambda"
+      }
+    },
+    {
+      "id": "repositoriesLogGroup",
+      "kind": "job",
+      "name": "repositoriesLogGroup",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:logs",
+        "awsService": "CloudWatch Logs",
+        "icon": "logs"
+      },
+      "parentId": "repositoriesLambda"
+    },
+    {
+      "id": "repositoriesLambda",
+      "kind": "service",
+      "name": "repositoriesLambda",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:lambda",
+        "awsService": "Lambda",
+        "icon": "lambda"
+      }
+    },
+    {
+      "id": "stateRedeemLogGroup",
+      "kind": "job",
+      "name": "stateRedeemLogGroup",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:logs",
+        "awsService": "CloudWatch Logs",
+        "icon": "logs"
+      },
+      "parentId": "stateRedeemLambda"
+    },
+    {
+      "id": "stateRedeemLambda",
+      "kind": "service",
+      "name": "stateRedeemLambda",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:lambda",
+        "awsService": "Lambda",
+        "icon": "lambda"
+      }
+    },
+    {
+      "id": "callbackLogGroup",
+      "kind": "job",
+      "name": "callbackLogGroup",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:logs",
+        "awsService": "CloudWatch Logs",
+        "icon": "logs"
+      },
+      "parentId": "callbackLambda"
+    },
+    {
+      "id": "callbackLambda",
+      "kind": "service",
+      "name": "callbackLambda",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:lambda",
+        "awsService": "Lambda",
+        "icon": "lambda"
+      }
+    },
+    {
+      "id": "httpApi",
+      "kind": "external",
+      "name": "httpApi",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:apigw",
+        "awsService": "API Gateway",
+        "icon": "apigw"
+      }
+    },
+    {
+      "id": "webhookIngestLogGroup",
+      "kind": "job",
+      "name": "webhookIngestLogGroup",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:logs",
+        "awsService": "CloudWatch Logs",
+        "icon": "logs"
+      },
+      "parentId": "webhookIngestLambda"
+    },
+    {
+      "id": "webhookIngestLambda",
+      "kind": "service",
+      "name": "webhookIngestLambda",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:lambda",
+        "awsService": "Lambda",
+        "icon": "lambda"
+      }
+    },
+    {
+      "id": "webhookProcessLogGroup",
+      "kind": "job",
+      "name": "webhookProcessLogGroup",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:logs",
+        "awsService": "CloudWatch Logs",
+        "icon": "logs"
+      },
+      "parentId": "webhookProcessLambda"
+    },
+    {
+      "id": "webhookProcessLambda",
+      "kind": "service",
+      "name": "webhookProcessLambda",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:lambda",
+        "awsService": "Lambda",
+        "icon": "lambda"
+      }
+    },
+    {
+      "id": "dashboard",
+      "kind": "job",
+      "name": "dashboard",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:cloudwatch",
+        "awsService": "CloudWatch",
+        "icon": "cloudwatch"
+      }
+    },
+    {
+      "id": "alarmTopic",
+      "kind": "queue",
+      "name": "alarmTopic",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:sns",
+        "awsService": "SNS",
+        "icon": "sns"
+      }
+    },
+    {
+      "id": "alarmNotifierLambda",
+      "kind": "service",
+      "name": "alarmNotifierLambda",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:lambda",
+        "awsService": "Lambda",
+        "icon": "lambda"
+      }
+    },
+    {
+      "id": "alarm",
+      "kind": "job",
+      "name": "alarm",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:cloudwatch",
+        "awsService": "CloudWatch",
+        "icon": "cloudwatch"
+      }
+    },
+    {
+      "id": "stateTokensTable",
+      "kind": "datastore",
+      "name": "stateTokensTable",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayDataStack"
+      ],
+      "metadata": {
+        "subtype": "aws:dynamodb",
+        "awsService": "DynamoDB",
+        "icon": "dynamodb"
+      }
+    },
+    {
+      "id": "installationsTable",
+      "kind": "datastore",
+      "name": "installationsTable",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayDataStack"
+      ],
+      "metadata": {
+        "subtype": "aws:dynamodb",
+        "awsService": "DynamoDB",
+        "icon": "dynamodb"
+      }
+    },
+    {
+      "id": "gatewayCredentialsTable",
+      "kind": "datastore",
+      "name": "gatewayCredentialsTable",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayDataStack"
+      ],
+      "metadata": {
+        "subtype": "aws:dynamodb",
+        "awsService": "DynamoDB",
+        "icon": "dynamodb"
+      }
+    },
+    {
+      "id": "gatewayEventsTable",
+      "kind": "datastore",
+      "name": "gatewayEventsTable",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayDataStack"
+      ],
+      "metadata": {
+        "subtype": "aws:dynamodb",
+        "awsService": "DynamoDB",
+        "icon": "dynamodb"
+      }
+    },
+    {
+      "id": "githubAppPrivateKeySecret",
+      "kind": "datastore",
+      "name": "githubAppPrivateKeySecret",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayDataStack"
+      ],
+      "metadata": {
+        "subtype": "aws:secret",
+        "awsService": "Secrets Manager",
+        "icon": "secret"
+      }
+    },
+    {
+      "id": "webhookEventsDlq",
+      "kind": "queue",
+      "name": "webhookEventsDlq",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayDataStack"
+      ],
+      "metadata": {
+        "subtype": "aws:sqs",
+        "awsService": "SQS",
+        "icon": "sqs"
+      }
+    },
+    {
+      "id": "webhookEventsQueue",
+      "kind": "queue",
+      "name": "webhookEventsQueue",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayDataStack"
+      ],
+      "metadata": {
+        "subtype": "aws:sqs",
+        "awsService": "SQS",
+        "icon": "sqs"
+      }
+    },
+    {
+      "id": "webhookSecret",
+      "kind": "datastore",
+      "name": "webhookSecret",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayDataStack"
+      ],
+      "metadata": {
+        "subtype": "aws:secret",
+        "awsService": "Secrets Manager",
+        "icon": "secret"
+      }
+    },
+    {
+      "id": "webhookDeliveriesTable",
+      "kind": "datastore",
+      "name": "webhookDeliveriesTable",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayDataStack"
+      ],
+      "metadata": {
+        "subtype": "aws:dynamodb",
+        "awsService": "DynamoDB",
+        "icon": "dynamodb"
+      }
+    },
+    {
+      "id": "trailLogGroup",
+      "kind": "job",
+      "name": "trailLogGroup",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewaySecurityStack"
+      ],
+      "metadata": {
+        "subtype": "aws:logs",
+        "awsService": "CloudWatch Logs",
+        "icon": "logs"
+      }
+    },
+    {
+      "id": "credentialWriteAlarm",
+      "kind": "job",
+      "name": "credentialWriteAlarm",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewaySecurityStack"
+      ],
+      "metadata": {
+        "subtype": "aws:cloudwatch",
+        "awsService": "CloudWatch",
+        "icon": "cloudwatch"
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "e1",
+      "fromId": "handoffLambda",
+      "toId": "stateTokensTable",
+      "kind": "data-write",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "grantWriteData"
+    },
+    {
+      "id": "e2",
+      "fromId": "handoffLambda",
+      "toId": "gatewayCredentialsTable",
+      "kind": "data-read",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "grantReadData"
+    },
+    {
+      "id": "e3",
+      "fromId": "installationsLookupLambda",
+      "toId": "installationsTable",
+      "kind": "data-read",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "grantReadData"
+    },
+    {
+      "id": "e4",
+      "fromId": "installationsLookupLambda",
+      "toId": "gatewayCredentialsTable",
+      "kind": "data-read",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "grantReadData"
+    },
+    {
+      "id": "e5",
+      "fromId": "installationsLookupLambda",
+      "toId": "githubAppPrivateKeySecret",
+      "kind": "data-read",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "grantRead"
+    },
+    {
+      "id": "e6",
+      "fromId": "repoEnvironmentsLambda",
+      "toId": "installationsTable",
+      "kind": "data-read",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "grantReadData"
+    },
+    {
+      "id": "e7",
+      "fromId": "repoEnvironmentsLambda",
+      "toId": "gatewayCredentialsTable",
+      "kind": "data-read",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "grantReadData"
+    },
+    {
+      "id": "e8",
+      "fromId": "repoEnvironmentsLambda",
+      "toId": "githubAppPrivateKeySecret",
+      "kind": "data-read",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "grantRead"
+    },
+    {
+      "id": "e9",
+      "fromId": "repositoriesLambda",
+      "toId": "installationsTable",
+      "kind": "data-read",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "grantReadData"
+    },
+    {
+      "id": "e10",
+      "fromId": "repositoriesLambda",
+      "toId": "gatewayCredentialsTable",
+      "kind": "data-read",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "grantReadData"
+    },
+    {
+      "id": "e11",
+      "fromId": "repositoriesLambda",
+      "toId": "githubAppPrivateKeySecret",
+      "kind": "data-read",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "grantRead"
+    },
+    {
+      "id": "e12",
+      "fromId": "stateRedeemLambda",
+      "toId": "stateTokensTable",
+      "kind": "data-write",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "grantReadWriteData"
+    },
+    {
+      "id": "e13",
+      "fromId": "callbackLambda",
+      "toId": "stateTokensTable",
+      "kind": "data-write",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "grantWriteData"
+    },
+    {
+      "id": "e14",
+      "fromId": "callbackLambda",
+      "toId": "installationsTable",
+      "kind": "data-write",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "grantWriteData"
+    },
+    {
+      "id": "e15",
+      "fromId": "httpApi",
+      "toId": "handoffLambda",
+      "kind": "sync-call",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "/installations/handoff"
+    },
+    {
+      "id": "e16",
+      "fromId": "httpApi",
+      "toId": "stateRedeemLambda",
+      "kind": "sync-call",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "/installations/state/{token}/redeem"
+    },
+    {
+      "id": "e17",
+      "fromId": "httpApi",
+      "toId": "callbackLambda",
+      "kind": "sync-call",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "/installations/callback"
+    },
+    {
+      "id": "e18",
+      "fromId": "httpApi",
+      "toId": "installationsLookupLambda",
+      "kind": "sync-call",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "/installations"
+    },
+    {
+      "id": "e19",
+      "fromId": "httpApi",
+      "toId": "repoEnvironmentsLambda",
+      "kind": "sync-call",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "/repos/{owner}/{repo}/environments"
+    },
+    {
+      "id": "e20",
+      "fromId": "httpApi",
+      "toId": "repositoriesLambda",
+      "kind": "sync-call",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "/repositories"
+    },
+    {
+      "id": "e21",
+      "fromId": "webhookIngestLambda",
+      "toId": "webhookEventsQueue",
+      "kind": "async-event",
+      "criticality": "soft",
+      "optional": true,
+      "tags": [],
+      "description": "grantSendMessages"
+    },
+    {
+      "id": "e22",
+      "fromId": "webhookIngestLambda",
+      "toId": "webhookSecret",
+      "kind": "data-read",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "grantRead"
+    },
+    {
+      "id": "e23",
+      "fromId": "httpApi",
+      "toId": "webhookIngestLambda",
+      "kind": "sync-call",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "/webhook"
+    },
+    {
+      "id": "e24",
+      "fromId": "webhookProcessLambda",
+      "toId": "installationsTable",
+      "kind": "data-write",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "grantWriteData"
+    },
+    {
+      "id": "e25",
+      "fromId": "webhookProcessLambda",
+      "toId": "webhookDeliveriesTable",
+      "kind": "data-write",
+      "criticality": "hard",
+      "optional": false,
+      "tags": [],
+      "description": "grantReadWriteData"
+    },
+    {
+      "id": "e26",
+      "fromId": "webhookEventsQueue",
+      "toId": "webhookProcessLambda",
+      "kind": "async-event",
+      "criticality": "soft",
+      "optional": true,
+      "tags": [],
+      "description": "event source"
+    },
+    {
+      "id": "e27",
+      "fromId": "alarmTopic",
+      "toId": "alarmNotifierLambda",
+      "kind": "async-event",
+      "criticality": "soft",
+      "optional": true,
+      "tags": [],
+      "description": "subscription"
+    },
+    {
+      "id": "e28",
+      "fromId": "webhookEventsQueue",
+      "toId": "webhookEventsDlq",
+      "kind": "async-event",
+      "criticality": "soft",
+      "optional": true,
+      "tags": [],
+      "description": "dead-letter"
+    }
+  ],
+  "capabilities": [],
+  "owners": []
+}

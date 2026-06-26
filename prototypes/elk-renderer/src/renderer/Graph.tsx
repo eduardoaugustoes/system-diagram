@@ -9,6 +9,7 @@ import {
   nodeStyle,
   overlayContext,
 } from "./styleTable"
+import { iconForSubtype } from "./icons"
 
 interface GraphProps {
   model: Model
@@ -30,6 +31,12 @@ export function Graph({ model, layout, overlay, selectedId, onSelect }: GraphPro
     for (const n of layout.nodes) map.set(n.id, { x: n.x, y: n.y, width: n.width, height: n.height })
     return map
   }, [layout])
+
+  const containerIds = useMemo(() => {
+    const set = new Set<string>()
+    for (const c of model.components) if (c.parentId) set.add(c.parentId)
+    return set
+  }, [model])
 
   const padding = 32
   const viewWidth = layout.width + padding * 2
@@ -133,6 +140,47 @@ export function Graph({ model, layout, overlay, selectedId, onSelect }: GraphPro
       {layout.nodes.map(positioned => {
         const component = nodeIndex.get(positioned.id)
         if (!component) return null
+        if (component.parentId) {
+          // contained child: a small chip with a type label + its own name
+          const childIcon = iconForSubtype(component.metadata?.subtype as string | undefined)
+          return (
+            <g key={positioned.id} transform={`translate(${positioned.x}, ${positioned.y})`}>
+              <rect
+                width={positioned.width}
+                height={positioned.height}
+                rx={4}
+                ry={4}
+                fill={COLORS.cardBg}
+                stroke={COLORS.faded}
+                strokeWidth={1}
+              />
+              {childIcon && (
+                <text
+                  x={positioned.width / 2}
+                  y={positioned.height / 2 - 5}
+                  textAnchor="middle"
+                  fontFamily="Inter, sans-serif"
+                  fontSize={7}
+                  fontWeight={600}
+                  letterSpacing={0.5}
+                  fill={COLORS.mutedInk}
+                >
+                  {childIcon.label.toUpperCase()}
+                </text>
+              )}
+              <text
+                x={positioned.width / 2}
+                y={positioned.height / 2 + 7}
+                textAnchor="middle"
+                fontFamily="JetBrains Mono, monospace"
+                fontSize={8}
+                fill={COLORS.ink}
+              >
+                {component.name}
+              </text>
+            </g>
+          )
+        }
         const ctx = overlayContext(overlay, positioned.id)
         const style = nodeStyle(
           component.kind,
@@ -161,9 +209,32 @@ export function Graph({ model, layout, overlay, selectedId, onSelect }: GraphPro
               strokeWidth={selected ? 2.5 : style.strokeWidth}
               cornerRadius={style.cornerRadius}
             />
+            {(() => {
+              const icon = iconForSubtype(component.metadata?.subtype as string | undefined)
+              return icon ? (
+                <text
+                  x={positioned.width / 2}
+                  y={14}
+                  textAnchor="middle"
+                  fontFamily="Inter, sans-serif"
+                  fontSize={9}
+                  fontWeight={600}
+                  letterSpacing={0.5}
+                  fill={ctx.faded ? COLORS.fadedText : COLORS.mutedInk}
+                >
+                  {icon.label.toUpperCase()}
+                </text>
+              ) : null
+            })()}
             <text
               x={positioned.width / 2}
-              y={component.kind === "queue" ? positioned.height / 2 + 4 : positioned.height / 2 - 2}
+              y={
+                containerIds.has(positioned.id)
+                  ? 26
+                  : component.kind === "queue"
+                    ? positioned.height / 2 + 4
+                    : positioned.height / 2 - 2
+              }
               textAnchor="middle"
               fontFamily="JetBrains Mono, monospace"
               fontSize={12}
