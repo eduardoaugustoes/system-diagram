@@ -3,6 +3,7 @@ import { readdirSync, readFileSync } from "node:fs"
 import { join } from "node:path"
 import { extractComponents } from "./components"
 import { extractConnections } from "./connections"
+import { linkParents } from "./parentLink"
 import { validate } from "../../../prototypes/elk-renderer/src/engine/engine"
 import type { Component, Connection, Diagnostic, ImporterPlugin, ImportOptions, ImportResult, Model } from "./types"
 
@@ -43,6 +44,7 @@ export const CdkImporter: ImporterPlugin = {
       diagnostics.push(...diags)
       perFileLocal.set(source, byVarName)
       for (const [name, comp] of byVarName) dataFields.set(name, comp) // producers visible cross-file
+      diagnostics.push(...linkParents(source, byVarName)) // LogGroup → Lambda nesting (same file)
     }
 
     const connections: Connection[] = []

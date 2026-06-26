@@ -14,12 +14,20 @@ const maybe = present ? describe : describe.skip
 maybe("golden: github-app-gateway", () => {
   const result = CdkImporter.import(FILES, { systemId: "github-app-gateway", systemName: "GitHub App Gateway" })
 
-  // 9 data-stack resources + 9 Lambdas + HTTP API + SNS topic + CloudWatch
-  // Dashboard + CloudWatch Alarm = 22. (The EventBridge Rule at line 943 is
-  // constructed inline with no variable binding, so it has no node id and is
-  // reported as an ANON_CONSTRUCT diagnostic instead — see below.)
-  it("extracts 22 components", () => {
-    expect(result.model.components).toHaveLength(22)
+  // 22 peer resources + the 8 Lambda-owned LogGroups now included as nested
+  // children = 30. (The EventBridge Rule at line 943 is constructed inline with
+  // no variable binding, so it has no node id and is reported as an
+  // ANON_CONSTRUCT diagnostic instead — see below.)
+  it("extracts 30 components, 8 of them nested LogGroups", () => {
+    expect(result.model.components).toHaveLength(30)
+    const nested = result.model.components.filter(c => c.parentId !== undefined)
+    expect(nested).toHaveLength(8)
+    expect(nested.every(c => c.metadata.subtype === "aws:logs")).toBe(true)
+  })
+
+  it("nests handoffLogGroup inside handoffLambda", () => {
+    const log = result.model.components.find(c => c.id === "handoffLogGroup")
+    expect(log?.parentId).toBe("handoffLambda")
   })
 
   // 18 IAM grants + 7 HTTP integrations + 1 SQS event source + 1 DLQ overflow

@@ -34,7 +34,7 @@ export function extractComponents(source: SourceFile, stackTag: string): Extract
     if (!cls) continue
     const entry = lookupSubtype(cls)
     if (!entry) {
-      if (cls === "LogGroup" || cls === "CfnOutput" || cls.startsWith("Cfn")) {
+      if (cls === "CfnOutput" || cls.startsWith("Cfn")) {
         diagnostics.push({
           level: "info",
           code: "UNMAPPED_CONSTRUCT",

@@ -5,6 +5,21 @@
   },
   "components": [
     {
+      "id": "handoffLogGroup",
+      "kind": "job",
+      "name": "handoffLogGroup",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:logs",
+        "awsService": "CloudWatch Logs",
+        "icon": "logs"
+      },
+      "parentId": "handoffLambda"
+    },
+    {
       "id": "handoffLambda",
       "kind": "service",
       "name": "handoffLambda",
@@ -17,6 +32,21 @@
         "awsService": "Lambda",
         "icon": "lambda"
       }
+    },
+    {
+      "id": "installationsLookupLogGroup",
+      "kind": "job",
+      "name": "installationsLookupLogGroup",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:logs",
+        "awsService": "CloudWatch Logs",
+        "icon": "logs"
+      },
+      "parentId": "installationsLookupLambda"
     },
     {
       "id": "installationsLookupLambda",
@@ -33,6 +63,21 @@
       }
     },
     {
+      "id": "repoEnvironmentsLogGroup",
+      "kind": "job",
+      "name": "repoEnvironmentsLogGroup",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:logs",
+        "awsService": "CloudWatch Logs",
+        "icon": "logs"
+      },
+      "parentId": "repoEnvironmentsLambda"
+    },
+    {
       "id": "repoEnvironmentsLambda",
       "kind": "service",
       "name": "repoEnvironmentsLambda",
@@ -45,6 +90,21 @@
         "awsService": "Lambda",
         "icon": "lambda"
       }
+    },
+    {
+      "id": "repositoriesLogGroup",
+      "kind": "job",
+      "name": "repositoriesLogGroup",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:logs",
+        "awsService": "CloudWatch Logs",
+        "icon": "logs"
+      },
+      "parentId": "repositoriesLambda"
     },
     {
       "id": "repositoriesLambda",
@@ -61,6 +121,21 @@
       }
     },
     {
+      "id": "stateRedeemLogGroup",
+      "kind": "job",
+      "name": "stateRedeemLogGroup",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:logs",
+        "awsService": "CloudWatch Logs",
+        "icon": "logs"
+      },
+      "parentId": "stateRedeemLambda"
+    },
+    {
       "id": "stateRedeemLambda",
       "kind": "service",
       "name": "stateRedeemLambda",
@@ -73,6 +148,21 @@
         "awsService": "Lambda",
         "icon": "lambda"
       }
+    },
+    {
+      "id": "callbackLogGroup",
+      "kind": "job",
+      "name": "callbackLogGroup",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:logs",
+        "awsService": "CloudWatch Logs",
+        "icon": "logs"
+      },
+      "parentId": "callbackLambda"
     },
     {
       "id": "callbackLambda",
@@ -103,6 +193,21 @@
       }
     },
     {
+      "id": "webhookIngestLogGroup",
+      "kind": "job",
+      "name": "webhookIngestLogGroup",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:logs",
+        "awsService": "CloudWatch Logs",
+        "icon": "logs"
+      },
+      "parentId": "webhookIngestLambda"
+    },
+    {
       "id": "webhookIngestLambda",
       "kind": "service",
       "name": "webhookIngestLambda",
@@ -115,6 +220,21 @@
         "awsService": "Lambda",
         "icon": "lambda"
       }
+    },
+    {
+      "id": "webhookProcessLogGroup",
+      "kind": "job",
+      "name": "webhookProcessLogGroup",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewayAppStack"
+      ],
+      "metadata": {
+        "subtype": "aws:logs",
+        "awsService": "CloudWatch Logs",
+        "icon": "logs"
+      },
+      "parentId": "webhookProcessLambda"
     },
     {
       "id": "webhookProcessLambda",
@@ -310,6 +430,20 @@
         "subtype": "aws:dynamodb",
         "awsService": "DynamoDB",
         "icon": "dynamodb"
+      }
+    },
+    {
+      "id": "trailLogGroup",
+      "kind": "job",
+      "name": "trailLogGroup",
+      "capabilityIds": [],
+      "tags": [
+        "stack:GatewaySecurityStack"
+      ],
+      "metadata": {
+        "subtype": "aws:logs",
+        "awsService": "CloudWatch Logs",
+        "icon": "logs"
       }
     },
     {

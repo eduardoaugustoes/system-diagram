@@ -24,11 +24,18 @@ describe("extractComponents", () => {
     expect(byVarName.get("installationsTable")).toBe(c)
   })
 
-  it("ignores unknown constructs (LogGroup) and emits an info diagnostic", () => {
-    const src = parse(`const lg = new logs.LogGroup(this, "LG", {})`)
+  it("ignores unknown constructs (CfnOutput) and emits an info diagnostic", () => {
+    const src = parse(`const out = new cdk.CfnOutput(this, "Out", {})`)
     const { components, diagnostics } = extractComponents(src, "App")
     expect(components).toHaveLength(0)
     expect(diagnostics.some(d => d.level === "info" && d.code === "UNMAPPED_CONSTRUCT")).toBe(true)
+  })
+
+  it("now extracts LogGroup as a component (it is a known aws:logs construct)", () => {
+    const src = parse(`const lg = new logs.LogGroup(this, "LG", {})`)
+    const { components } = extractComponents(src, "App")
+    expect(components).toHaveLength(1)
+    expect(components[0].metadata.subtype).toBe("aws:logs")
   })
 
   it("captures this.field = new ... assignments (public readonly producers)", () => {
