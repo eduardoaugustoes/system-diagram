@@ -2,10 +2,12 @@
   "name": "@system-diagram/desktop",
   "version": "0.0.1",
   "private": true,
-  "main": "bootstrap.cjs",
+  "main": "build/main.cjs",
   "scripts": {
     "build:renderer": "cd ../../prototypes/elk-renderer && npm run build",
-    "start": "npm run build:renderer && electron .",
+    "build:main": "esbuild src/main.ts --bundle --platform=node --format=cjs --external:electron --outfile=build/main.cjs && cp src/preload.cjs build/preload.cjs",
+    "start": "npm run build:renderer && npm run build:main && electron .",
+    "dist": "npm run build:renderer && npm run build:main && electron-builder --mac",
     "test": "vitest run",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
@@ -13,8 +15,28 @@
     "tsx": "^4.19.0"
   },
   "devDependencies": {
+    "esbuild": "^0.24.0",
     "electron": "^33.0.0",
+    "electron-builder": "^25.1.0",
     "typescript": "^5.6.3",
     "vitest": "^2.1.0"
+  },
+  "build": {
+    "appId": "io.systemdiagram.desktop",
+    "productName": "System Diagram",
+    "directories": { "output": "dist-app" },
+    "files": [
+      "build/main.cjs",
+      "build/preload.cjs",
+      "package.json"
+    ],
+    "extraResources": [
+      { "from": "../../prototypes/elk-renderer/dist", "to": "renderer" }
+    ],
+    "mac": {
+      "target": ["dir", "dmg"],
+      "icon": "build-assets/icon.icns",
+      "identity": null
+    }
   }
 }
