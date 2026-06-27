@@ -61,10 +61,9 @@ function createWindow() {
       nodeIntegration: false,
     },
   })
-  const rendererIndex = path.resolve(
-    __dirname,
-    "../../../prototypes/elk-renderer/dist/index.html",
-  )
+  const rendererIndex = app.isPackaged
+    ? path.join(process.resourcesPath, "renderer", "index.html")
+    : path.resolve(__dirname, "../../../prototypes/elk-renderer/dist/index.html")
   win.loadFile(rendererIndex)
   registerIpc(win)
   buildMenu(win)
