@@ -31,6 +31,7 @@ export function App() {
   const [overlay, setOverlay] = useState<Overlay | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [railIcon, setRailIcon] = useState<RailIcon | null>(null)
+  const [structureOnly, setStructureOnly] = useState(false)
 
   const activeVision = useMemo(
     () => store.visions.find(v => v.id === store.activeId) ?? store.visions[0],
@@ -188,6 +189,13 @@ export function App() {
             </span>
           )}
           <button
+            onClick={() => setStructureOnly(v => !v)}
+            style={structureOnly ? activeButtonStyle : secondaryButtonStyle}
+            title="Hide implementation names — show structure by type only"
+          >
+            {structureOnly ? "Structure only" : "Show structure"}
+          </button>
+          <button
             onClick={() => selectedId && runBlastRadius(selectedId)}
             disabled={!selectedId}
             style={selectedId ? secondaryButtonStyle : disabledButtonStyle}
@@ -236,6 +244,7 @@ export function App() {
               overlay={overlay}
               selectedId={selectedId}
               onSelect={setSelectedId}
+              structureOnly={structureOnly}
             />
           ) : (
             <div style={messageStyle}>Laying out…</div>
@@ -301,6 +310,13 @@ const disabledButtonStyle: React.CSSProperties = {
   ...secondaryButtonStyle,
   color: "#D6D3D1",
   cursor: "not-allowed",
+}
+
+const activeButtonStyle: React.CSSProperties = {
+  ...secondaryButtonStyle,
+  background: "#1C1917",
+  color: "#FFFFFF",
+  border: "1px solid #1C1917",
 }
 
 const messageStyle: React.CSSProperties = {

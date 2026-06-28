@@ -17,9 +17,17 @@ interface GraphProps {
   overlay: Overlay | null
   selectedId: string | null
   onSelect: (id: string | null) => void
+  structureOnly?: boolean
 }
 
-export function Graph({ model, layout, overlay, selectedId, onSelect }: GraphProps) {
+export function Graph({
+  model,
+  layout,
+  overlay,
+  selectedId,
+  onSelect,
+  structureOnly = false,
+}: GraphProps) {
   const nodeIndex = useMemo(() => {
     const map = new Map<string, Component>()
     for (const c of model.components) map.set(c.id, c)
@@ -157,27 +165,29 @@ export function Graph({ model, layout, overlay, selectedId, onSelect }: GraphPro
               {childIcon && (
                 <text
                   x={positioned.width / 2}
-                  y={positioned.height / 2 - 5}
+                  y={structureOnly ? positioned.height / 2 + 3 : positioned.height / 2 - 5}
                   textAnchor="middle"
                   fontFamily="Inter, sans-serif"
                   fontSize={7}
                   fontWeight={600}
                   letterSpacing={0.5}
-                  fill={COLORS.mutedInk}
+                  fill={structureOnly ? COLORS.ink : COLORS.mutedInk}
                 >
                   {childIcon.label.toUpperCase()}
                 </text>
               )}
-              <text
-                x={positioned.width / 2}
-                y={positioned.height / 2 + 7}
-                textAnchor="middle"
-                fontFamily="JetBrains Mono, monospace"
-                fontSize={8}
-                fill={COLORS.ink}
-              >
-                {component.name}
-              </text>
+              {!structureOnly && (
+                <text
+                  x={positioned.width / 2}
+                  y={positioned.height / 2 + 7}
+                  textAnchor="middle"
+                  fontFamily="JetBrains Mono, monospace"
+                  fontSize={8}
+                  fill={COLORS.ink}
+                >
+                  {component.name}
+                </text>
+              )}
             </g>
           )
         }
@@ -211,39 +221,54 @@ export function Graph({ model, layout, overlay, selectedId, onSelect }: GraphPro
             />
             {(() => {
               const icon = iconForSubtype(component.metadata?.subtype as string | undefined)
-              return icon ? (
+              const typeLabel = icon?.label ?? (structureOnly ? component.kind : null)
+              if (!typeLabel) return null
+              const isContainer = containerIds.has(positioned.id)
+              // In structure-only mode the type label IS the node label: keep it
+              // pinned at the top for containers (children fill the body) and
+              // center it for leaf nodes.
+              const centeredTypeLabel = structureOnly && !isContainer
+              return (
                 <text
                   x={positioned.width / 2}
-                  y={14}
+                  y={centeredTypeLabel ? positioned.height / 2 + 4 : 14}
                   textAnchor="middle"
                   fontFamily="Inter, sans-serif"
-                  fontSize={9}
+                  fontSize={centeredTypeLabel ? 11 : 9}
                   fontWeight={600}
                   letterSpacing={0.5}
-                  fill={ctx.faded ? COLORS.fadedText : COLORS.mutedInk}
+                  fill={
+                    ctx.faded
+                      ? COLORS.fadedText
+                      : structureOnly
+                        ? style.textFill
+                        : COLORS.mutedInk
+                  }
                 >
-                  {icon.label.toUpperCase()}
+                  {typeLabel.toUpperCase()}
                 </text>
-              ) : null
+              )
             })()}
-            <text
-              x={positioned.width / 2}
-              y={
-                containerIds.has(positioned.id)
-                  ? 26
-                  : component.kind === "queue"
-                    ? positioned.height / 2 + 4
-                    : positioned.height / 2 - 2
-              }
-              textAnchor="middle"
-              fontFamily="JetBrains Mono, monospace"
-              fontSize={12}
-              fontWeight={500}
-              fill={style.textFill}
-            >
-              {component.name}
-            </text>
-            {component.kind !== "queue" && component.ownerId && (
+            {!structureOnly && (
+              <text
+                x={positioned.width / 2}
+                y={
+                  containerIds.has(positioned.id)
+                    ? 26
+                    : component.kind === "queue"
+                      ? positioned.height / 2 + 4
+                      : positioned.height / 2 - 2
+                }
+                textAnchor="middle"
+                fontFamily="JetBrains Mono, monospace"
+                fontSize={12}
+                fontWeight={500}
+                fill={style.textFill}
+              >
+                {component.name}
+              </text>
+            )}
+            {!structureOnly && component.kind !== "queue" && component.ownerId && (
               <text
                 x={positioned.width / 2}
                 y={positioned.height / 2 + 14}
